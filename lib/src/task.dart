@@ -359,6 +359,8 @@ class _TorrentTask
   }
 
   void _hookUTP(UTPSocket socket) {
+    _log.shout(
+        '_hookUTP : socket: ${socket.remoteAddress}:${socket.remotePort}');
     if (socket.remoteAddress == LOCAL_ADDRESS) {
       socket.close();
       return;
