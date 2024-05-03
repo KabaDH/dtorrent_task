@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:dtorrent_common/dtorrent_common.dart';
 import 'package:dtorrent_task/dtorrent_task.dart';
 
@@ -33,3 +34,10 @@ const DEFAULT_REQUEST_LENGTH = 16384;
 /// Remote is request piece length large or eqaul this length
 /// , it must close the connection
 const MAX_REQUEST_LENGTH = 131072;
+
+/// byte is byte with offset
+Piece? getPiece(List<Piece> pieces, int byte) {
+  return pieces
+      .firstWhereOrNull((piece) => piece.offset <= byte && piece.end >= byte);
+}
+

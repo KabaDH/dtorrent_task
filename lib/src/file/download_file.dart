@@ -8,6 +8,8 @@ import 'package:dtorrent_task/src/file/utils.dart';
 import 'package:dtorrent_task/src/piece/piece_base.dart';
 import 'package:logging/logging.dart';
 
+import '../utils.dart';
+
 var _log = Logger("DownloadFile");
 
 class DownloadFile {
@@ -130,12 +132,11 @@ class DownloadFile {
   /// the output will be offseted
   ///
   int? _calculateLastDownloadedByte(int startByte) {
-    var pieceLength = pieces.first.byteLength;
-
-    var startPieceIndex = startByte ~/ pieceLength;
+    var startPiece = getPiece(pieces, startByte);
+    if (startPiece == null) return null;
+    var startPieceIndex = pieces.indexOf(startPiece);
     var totalLastByte = startByte;
-    for (var piece
-        in pieces.where((element) => element.index >= startPieceIndex)) {
+    for (var piece in pieces.skip(startPieceIndex)) {
       var lastSubPieceByte = piece
           .calculateLastDownloadedByte(math.max(piece.offset, totalLastByte));
       totalLastByte = lastSubPieceByte;
